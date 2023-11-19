@@ -54,7 +54,7 @@ body, html {
 }
 .heatmapgradient {
   border-left: 1px solid #151515;
-  width: 500px; /* Width of the gradient strip */
+  width: 100px; /* Width of the gradient strip */
   background: linear-gradient(to bottom, #1f1f1f, #1f1f1f); /* Gradient colors */
   border-radius: 0 5px 5px 0; /* Rounded corners on the right side */
 }
