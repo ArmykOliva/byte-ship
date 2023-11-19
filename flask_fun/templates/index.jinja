@@ -1,0 +1,214 @@
+{% extends 'base.jinja' %}
+
+{%block head%}
+<script src="{{ url_for('static', filename='get-log-lines.js') }}"></script>
+<script>
+function display_filters(){
+   var x = document.getElementById("dropdown_filters_container");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
+</script>
+<title>
+Team TABLE Log Analysis
+</title>
+{%endblock%}
+
+{% block body%}
+
+
+<div class="main_container">
+  <div class="navbar">
+      <div class="navbar-container">
+        <div class="upload-btn-container">
+          <input type="file" id="file-upload" hidden>
+        <button class="upload-btn">
+        <i class="fa-solid fa-upload" style="color: #ffffff; margin-right: 10px;"></i>
+          Upload New File
+        </button>
+        </div>
+         <button class="top-right-button" onclick="display_filters()"><i class="fa-solid fa-filter" style="color: #ffffff; margin-right: 10px;"></i>Filters</button>
+      </div>
+  </div>
+
+  <div class="container">
+      <div class="log-container">
+        <div class="log-viewer" id="log-viewer">
+            loading...
+        </div>
+        <div class="heatmapgradient">
+        
+        </div>
+      </div>
+
+      <div class="chat-interfacee">
+          <div id="chatOutput" class="chat-outputt clearfix">
+          </div>
+
+    
+          <div class="example-messages-label">Example Messages:</div>
+          <div class="example-messages">
+            <div class="example-message" onclick="copyMessageToChat(this)">Find error in selection</div>
+            <div class="example-message" onclick="copyMessageToChat(this)">Any discrepancies?</div>
+            <div class="example-message" onclick="copyMessageToChat(this)">Any unauthorized entry attempts?</div>
+            <div class="example-message" onclick="copyMessageToChat(this)">Python errors?</div>
+          </div>
+
+          <div class="chat-input-container">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Type your message...">
+            <button id="sendButton" class="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+            <button id="removeChat" class="send-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+      </div>
+  </div>
+  <div class="dropdown-container" id="dropdown_filters_container" style="display: none;">
+    <h2 class="dropdownmenu-header">Logline filters</h2>
+    <div class="categories-unscrollable">
+        <button class="unscrollable-item" id="red">error</button>
+        <button class="unscrollable-item" id="blue">warning</button>
+        <button class="unscrollable-item" id="yellow">debug</button>
+        <button class="unscrollable-item" id="purple">info</button>
+    </div>
+    <h2 class="dropdownmenu-header">Executable Categories</h2>
+    <div class="categories-scrollable">
+        <!-- Line 1 -->
+<button class="scrollable-item">kernel</button>
+<button class="scrollable-item">systemd</button>
+<button class="scrollable-item">systemd-journald</button>
+
+<!-- Line 2 -->
+<button class="scrollable-item">audit</button>
+<button class="scrollable-item">systemd-sysctl</button>
+<button class="scrollable-item">systemd-tmpfiles</button>
+
+<!-- Line 3 -->
+<button class="scrollable-item">systemd-udevd</button>
+<button class="scrollable-item">bootctl</button>
+<button class="scrollable-item">systemd-fsck</button>
+
+<!-- Line 4 -->
+<button class="scrollable-item">systemd-modules-load</button>
+<button class="scrollable-item">avahi-daemon</button>
+<button class="scrollable-item">start_cmxmarsserver.sh</button>
+
+<!-- Line 5 -->
+<button class="scrollable-item">bash</button>
+<button class="scrollable-item">start-mrt.node-exporter.sh</button>
+<button class="scrollable-item">rngd</button>
+
+<!-- Line 6 -->
+<button class="scrollable-item">health_service</button>
+<button class="scrollable-item">udisksd</button>
+<button class="scrollable-item">dbus-daemon</button>
+
+<!-- Line 7 -->
+<button class="scrollable-item">polkitd</button>
+<button class="scrollable-item">Xserver</button>
+<button class="scrollable-item">enable-mrt.swap.sh</button>
+
+<!-- Line 8 -->
+<button class="scrollable-item">systemd-logind</button>
+<button class="scrollable-item">NetworkManager</button>
+<button class="scrollable-item">rspias-daemon</button>
+
+<!-- Line 9 -->
+<button class="scrollable-item">nginx</button>
+<button class="scrollable-item">health_service.deviceapi</button>
+<button class="scrollable-item">containerd</button>
+
+<!-- Line 10 -->
+<button class="scrollable-item">snmpd</button>
+<button class="scrollable-item">start-mrt.sysmond.sh</button>
+<button class="scrollable-item">su</button>
+
+<!-- Line 11 -->
+<button class="scrollable-item">node</button>
+<button class="scrollable-item">systemd-nspawn</button>
+<button class="scrollable-item">systemd-machined</button>
+
+<!-- Line 12 -->
+<button class="scrollable-item">rshums</button>
+<button class="scrollable-item">machinectl</button>
+<button class="scrollable-item">killall</button>
+
+<!-- Line 13 -->
+<button class="scrollable-item">mrt.sfa.start.sh</button>
+<button class="scrollable-item">start_mrt.sh</button>
+<button class="scrollable-item">xu_launcher</button>
+
+<!-- Line 14 -->
+<button class="scrollable-item">dockerd</button>
+<button class="scrollable-item">sshd</button>
+<button class="scrollable-item">AlfManagerApp</button>
+
+<!-- Line 15 -->
+<button class="scrollable-item">RsLicenseServerApp</button>
+<button class="scrollable-item">start_blms_service.sh</button>
+<button class="scrollable-item">RsInstallation</button>
+
+<!-- Line 16 -->
+<button class="scrollable-item">mrt.dos</button>
+<button class="scrollable-item">python</button>
+<button class="scrollable-item">RsDeviceStarter</button>
+
+<!-- Line 17 -->
+<button class="scrollable-item">rs_callysto.callysto_server._logging_configuration</button>
+<button class="scrollable-item">rs_callysto.callysto_server.server_application</button>
+<button class="scrollable-item">load-images.sh</button>
+
+<!-- Line 18 -->
+<button class="scrollable-item">rs_callysto._run</button>
+<button class="scrollable-item">rs_callysto</button>
+<button class="scrollable-item">rs_callysto.callysto_servicer</button>
+
+<!-- Line 19 -->
+<button class="scrollable-item">rs_callysto.xlapi_nb_container_settings</button>
+<button class="scrollable-item">sh</button>
+<button class="scrollable-item">rs_callysto.notebook_server_controller</button>
+
+<!-- Line 20 -->
+<button class="scrollable-item">mrt.pos.catrp3dr</button>
+<button class="scrollable-item">mrt.pos.catrp3d1</button>
+
+<!-- Line 21 -->
+<button class="scrollable-item">rs_callysto._internal.concurrency_tools</button>
+<button class="scrollable-item">rs_callysto.callysto_server.cli</button>
+<button class="scrollable-item">rs_callysto.callysto_dbus_service</button>
+
+<!-- Line 22 -->
+<button class="scrollable-item">pcscd</button>
+<button class="scrollable-item">flexxamconfigurationbridge</button>
+<button class="scrollable-item">pu_ld_standalone</button>
+
+<!-- Line 23 -->
+<button class="scrollable-item">ptp4l</button>
+<button class="scrollable-item">systemd-coredump</button>
+<button class="scrollable-item">stop_cmxmarsserver.sh</button>
+
+<!-- Line 24 -->
+<button class="scrollable-item">ast2sys</button>
+<button class="scrollable-item">phc2sys</button>
+<button class="scrollable-item">stop_blms_service.sh</button>
+
+<!-- Line 25 -->
+<button class="scrollable-item">disable-mrt.swap.sh</button>
+<button class="scrollable-item">prettypb.stoppable_server</button>
+<button class="scrollable-item">docker-compose</button>
+
+<!-- Line 26 -->
+<button class="scrollable-item">callysto</button>
+<button class="scrollable-item">mrt-zmqbrokerd</button>
+
+    </div>
+</div>
+</div>
+
+{%endblock%}
