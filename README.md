@@ -1,2 +1,2 @@
-# hackatum2023-logalyze
-An intelligente interface for analysing log files.
+# hackatum2023
+hackatum 2023
