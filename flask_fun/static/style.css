@@ -452,3 +452,37 @@ a:hover {
 .top-right-button:hover {
   background-color: #777;
 }
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.search-input {
+  padding: 8px 16px;
+  border: 1px solid #474747;
+  border-radius: 4px;
+  color: #acbcc2;
+  background-color: #1f1f1f;
+  font-size: 15px;
+}
+
+.search-btn {
+  cursor: pointer;
+  background-color: #C2A9FA;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  margin-left: 5px;
+  font-size: 15px;
+}
+
+.search-input:focus {
+  outline: none;
+  border: 2px solid #C2A9FA;
+}
+.left-bar-container {
+  display: flex;
+  flex-direction: row;
+}
