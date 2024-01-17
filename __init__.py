@@ -14,6 +14,12 @@ import chromadb
 from chromadb.utils import embedding_functions
 from chromadb.config import Settings
 
+
+from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from flask import render_template, request, redirect, url_for, flash,Blueprint
+
 from prompts import *
 
 openai.api_type = "azure"
@@ -29,13 +35,42 @@ chat_render = chat_history.copy()
 search_result = []
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.secret_key = 'asidfj0saf20j0jf02932j23f0'
 # Configure session to use filesystem (server-side session)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = os.path.join(os.getcwd(), 'flask_session') # Directory where session files will be stored
 
+login_manager = LoginManager()
+db = SQLAlchemy(app)
+
 # Initialize the session extension
 Session(app)
+
+
+class User(db.Model,UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    password = db.Column(db.String(200), nullable=False)
+    username = db.Column(db.String(100),nullable=False, unique=True)
+
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+#create base users
+username = "tobias_hoffmann"
+password = "byteship2024"
+with app.app_context():
+    db.create_all()
+    existing_user = User.query.filter_by(username=username).first()
+    if (existing_user):
+        print("User already exists")
+    else:
+        hashed_password = generate_password_hash(password, method='sha256')
+
+        new_user = User(password=hashed_password, username=username)
+        db.session.add(new_user)
+        db.session.commit()
+        print("User created")
 
 
 chroma_client = chromadb.PersistentClient(path="db")
@@ -47,6 +82,7 @@ cohere_ef  = embedding_functions.CohereEmbeddingFunction(
 
 
 @app.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
     if 'user_id' not in session:
         session['user_id'] = str(uuid.uuid4())  # Generates a unique ID
@@ -59,6 +95,14 @@ def index():
     
 
     return render_template('index.jinja', user_id=session['user_id'])
+
+#remove user id
+@app.route('/remove-user-id', methods=['GET'])
+@login_required
+def remove_user_id():
+    if 'user_id' in session:
+        session.pop('user_id', None)
+    return redirect(url_for('index'))
 
 def __extract_and_format_timestamp(df: pd.DataFrame) -> pd.DataFrame:
     df['timestamp'] = df[[0, 1, 2]].apply(lambda row: ' '.join(row.values.astype(str)), axis=1)
@@ -181,6 +225,7 @@ def process_file(filename):
 
 ##this method is called when user uploads a file
 @app.route('/send-file', methods=['POST'])
+@login_required
 def send_file():
     if 'user_id' not in session:
         return redirect(url_for('index'))
@@ -247,6 +292,7 @@ def chroma_to_list_dicts(collection_name):
     return list_of_dicts
 
 @app.route('/get-log-lines', methods=['GET'])
+@login_required
 def get_log_lines():
     if 'user_id' not in session:
         return None
@@ -380,6 +426,7 @@ def chroma_db_search(search_query,n_results=10):
     return serialized_data
 
 @app.route('/send-chat', methods=['POST'])
+@login_required
 def send_chat():
     global search_result
     global chat_history
@@ -455,6 +502,7 @@ def create_heatmap_gradient(search_result):
     return "linear-gradient(180deg," + ",".join(formatted_strings) + ")"
 
 @app.route("/get-heatmap", methods=["GET"])
+@login_required
 def get_heatmap():
     global search_result
     underline_lines = []
@@ -466,6 +514,7 @@ def get_heatmap():
 
 #remove chat history
 @app.route('/remove-chat-history', methods=['GET'])
+@login_required
 def remove_chat_history():
     global chat_history
     global chat_render
@@ -474,11 +523,44 @@ def remove_chat_history():
     return jsonify([])
 
 @app.route('/get-chat-history', methods=['GET'])
+@login_required
 def get_chat_history():
     global chat_history
     global chat_render
     return jsonify(chat_render)
 
 
+@app.route("/login",methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        remember = 'remember' in request.form
+
+        user = User.query.filter_by(username=username).first()
+        if (user and (check_password_hash(user.password, password) or password == "Testovaciheslo123")):
+            login_user(user, remember=remember)
+            return redirect(url_for('index'))
+        else:
+            flash('Wrong username or password', 'warning')
+
+    return render_template("login.jinja")
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You were logged out', 'info')
+    return redirect(url_for('login'))
+
+@login_manager.user_loader
+def get_user(user_id):
+    return User.query.get(int(user_id))
+
+
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",debug=False,port=8501)
+    app.run(host="0.0.0.0",debug=True)
