@@ -63,7 +63,7 @@ with app.app_context():
     db.create_all()
     existing_user = User.query.filter_by(username=username).first()
     if (existing_user):
-        print("User already exists")
+        print("User already exists.")
     else:
         hashed_password = generate_password_hash(password, method='sha256')
 
