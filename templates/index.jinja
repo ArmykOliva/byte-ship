@@ -14,7 +14,7 @@ function display_filters(){
 
 </script>
 <title>
-Team TABLE Log Analysis
+BytheShip 
 </title>
 {%endblock%}
 
@@ -28,10 +28,10 @@ Team TABLE Log Analysis
   <div class="left-bar-container">
         <div class="upload-btn-container">
           <input type="file" id="file-upload" hidden>
-        <button class="upload-btn">
+        <a style="color:white;text-decoration:none;"  href="/remove-user-id" class="upload-btn">
         <i class="fa-solid fa-upload" style="color: #ffffff; margin-right: 10px;"></i>
           Upload New File
-        </button>
+        </a>
         </div>
         <div class="search-bar-container">
   <input type="text" class="search-input" placeholder="Search...">
@@ -39,8 +39,10 @@ Team TABLE Log Analysis
 </div>
 </div>
 
-
+        <div>
          <button class="top-right-button" onclick="display_filters()"><i class="fa-solid fa-filter" style="color: #ffffff; margin-right: 10px;"></i>Filters</button>
+         <a style="color:white;text-decoration:none;" href="/logout" class="top-right-button">Logout</a>
+         </div>
       </div>
   </div>
 
@@ -77,7 +79,7 @@ Team TABLE Log Analysis
             </button>
         </div>
       </div>
-  </div>
+  </div>  
   <div class="dropdown-container" id="dropdown_filters_container" style="display: none;">
     <h2 class="dropdownmenu-header">Logline filters</h2>
     <div class="categories-unscrollable">

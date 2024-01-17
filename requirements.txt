@@ -1,0 +1,10 @@
+Flask
+pandas
+uuid
+openai
+flask-session
+python-dotenv
+sqlalchemy
+Werkzeug
+flask-login
+flask_sqlalchemy
