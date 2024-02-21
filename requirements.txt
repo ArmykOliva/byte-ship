@@ -1,5 +1,6 @@
 Flask
 pandas
+pysqlite3-binary
 openai==0.28.1
 flask-session
 python-dotenv
