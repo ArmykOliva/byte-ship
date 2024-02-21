@@ -7,3 +7,4 @@ sqlalchemy
 Werkzeug
 flask-login
 flask_sqlalchemy
+chromadb
