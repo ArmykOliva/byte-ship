@@ -1,8 +1,12 @@
 # Instead of importing sqlite3, you use pysqlite3
 try:
-    from pysqlite3 import dbapi2 as sqlite3
-except ImportError:
-    import sqlite3
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+    print("using pysqlite3")
+except:
+    print("using sqlite3")
+    pass
 
 import uuid, os, openai
 import pandas as pd
