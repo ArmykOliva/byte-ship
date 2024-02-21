@@ -1,6 +1,5 @@
 Flask
 pandas
-uuid
 openai==0.28.1
 flask-session
 python-dotenv
