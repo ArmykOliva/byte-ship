@@ -4,6 +4,7 @@ pysqlite3-binary
 openai==0.28.1
 flask-session
 python-dotenv
+cohere
 sqlalchemy
 Werkzeug
 flask-login
