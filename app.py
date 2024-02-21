@@ -1,3 +1,9 @@
+# Instead of importing sqlite3, you use pysqlite3
+try:
+    from pysqlite3 import dbapi2 as sqlite3
+except ImportError:
+    import sqlite3
+
 import uuid, os, openai
 import pandas as pd
 from flask import Flask, request, make_response, render_template, session, url_for, redirect,jsonify
@@ -22,11 +28,7 @@ from flask import render_template, request, redirect, url_for, flash,Blueprint
 
 from prompts import *
 
-# Instead of importing sqlite3, you use pysqlite3
-try:
-    from pysqlite3 import dbapi2 as sqlite3
-except ImportError:
-    import sqlite3
+
 
 
 openai.api_type = "azure"
