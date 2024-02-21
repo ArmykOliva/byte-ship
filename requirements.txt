@@ -1,7 +1,7 @@
 Flask
 pandas
 uuid
-openai
+openai==0.28.1
 flask-session
 python-dotenv
 sqlalchemy

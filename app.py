@@ -24,7 +24,7 @@ from prompts import *
 
 openai.api_type = "azure"
 openai.api_base = "https://alagantgpt2.openai.azure.com/"
-openai.api_version = "2023-07-01-preview"
+openai.api_version = "2024-02-15-preview"
 openai.api_key = os.getenv("AZURE_API_KEY")
 #openai.api_key = os.getenv("OPENAI_API_KEY")
  
@@ -57,20 +57,20 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 #create base users
-username = "tobias_hoffmann"
-password = "byteship2024"
+accounts = [("tobias_hoffmann","byteship2024"),("olik","olik123")]
 with app.app_context():
     db.create_all()
-    existing_user = User.query.filter_by(username=username).first()
-    if (existing_user):
-        print("User already exists.")
-    else:
-        hashed_password = generate_password_hash(password, method='sha256')
+    for username,password in accounts:
+        existing_user = User.query.filter_by(username=username).first()
+        if (existing_user):
+            print("User already exists.")
+        else:
+            hashed_password = generate_password_hash(password, method='sha256')
 
-        new_user = User(password=hashed_password, username=username)
-        db.session.add(new_user)
-        db.session.commit()
-        print("User created")
+            new_user = User(password=hashed_password, username=username)
+            db.session.add(new_user)
+            db.session.commit()
+            print("User created")
 
 
 chroma_client = chromadb.PersistentClient(path="db")
@@ -178,9 +178,6 @@ def process_file(filename):
 
     #df.to_csv(os.path.join('data', filename + ".csv"), index=True)
     #df.reset_index(inplace=True, drop=False, names='line_number')
-
-    # Create SQLAlchemy engine
-    #engine = create_engine("mysql+mysqlconnector://pinda:Usgov123!Epic@20.122.110.183/logalyzer")
 
     # Write DataFrame to MySQL
     #df.to_sql('log_data', con=engine, if_exists='replace', index=False)
@@ -359,7 +356,7 @@ def gpt_call(messages,user_msg,temperature=0.4,print_response=True):
             function_call = False
             response = ""
             for chunk in openai.ChatCompletion.create(
-                engine="gpt-4-32k",
+                engine="gpt-4-turbo",
                 #model="gpt-4",
                 messages = messages,
                 temperature=temperature,
