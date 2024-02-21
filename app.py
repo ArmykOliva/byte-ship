@@ -22,6 +22,13 @@ from flask import render_template, request, redirect, url_for, flash,Blueprint
 
 from prompts import *
 
+# Instead of importing sqlite3, you use pysqlite3
+try:
+    from pysqlite3 import dbapi2 as sqlite3
+except ImportError:
+    import sqlite3
+
+
 openai.api_type = "azure"
 openai.api_base = "https://alagantgpt2.openai.azure.com/"
 openai.api_version = "2024-02-15-preview"
