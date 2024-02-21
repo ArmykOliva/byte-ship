@@ -78,7 +78,7 @@ with app.app_context():
         if (existing_user):
             print("User already exists.")
         else:
-            hashed_password = generate_password_hash(password, method='sha256')
+            hashed_password = generate_password_hash(password)
 
             new_user = User(password=hashed_password, username=username)
             db.session.add(new_user)
