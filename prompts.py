@@ -18,7 +18,7 @@ Another VERY important thing to keep in mind is chronology. The lines are number
 Your output ABSOLUTELY must make sense in terms of chronology.
 
 NEVER MAKE ANYTHING UP! ALWAYS USE THE LOG FILE SNIPPETE TO ANSWER THE QUESTION.
-Be very professional and as helpful as possible. Dont make your responses too long.
+Be very professional and as helpful as possible. Dont make your responses too long. Keep your response consise.
 """.strip()
 
 CHAT_PROMPT = """
@@ -33,7 +33,7 @@ User selection of the log snippet:
 {{user_selection}}
 
 The user sent this message: {{user_message}}
-Your goal is to respond to the user message by analysing the log file snippet. Try to prioritise using the user selection log snippet to answer the question. Or if you can use a function call to answer the user message, do that.s
+Your goal is to respond to the user message by analysing the log file snippet. Try to prioritise using the user selection log snippet to answer the question. Or if you can use a function call to answer the user message, do that. Response consisely.
 """
 
 SEARCH_QUERY_SYSTEM = """

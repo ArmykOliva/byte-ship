@@ -8,6 +8,7 @@ except:
     print("using sqlite3")
     pass
 
+import shutil
 import uuid, os, openai
 import pandas as pd
 from flask import Flask, request, make_response, render_template, session, url_for, redirect,jsonify
@@ -102,7 +103,7 @@ def index():
         print("New user",session['user_id'])
 
     #check if file user_id exists
-    filename = f"{session['user_id']}"
+    filename = "demo.out" #f"{session['user_id']}"
     if not os.path.exists(os.path.join(UPLOAD_FOLDER, filename)):
         return render_template('upload.jinja', user_id=session['user_id'])
     
@@ -254,6 +255,16 @@ def send_file():
         return 'No file selected'
     
     return redirect(url_for('index'))
+
+def fake_file():
+    filename = f"data/demo.out"
+    if not os.path.exists(UPLOAD_FOLDER):
+        os.makedirs(UPLOAD_FOLDER)
+    save_path = os.path.join(UPLOAD_FOLDER,  os.path.basename(filename))
+    shutil.copy(filename, save_path)
+
+    ##process file
+    process_file(os.path.basename(filename))
 
 def chroma_to_dataframe(collection_name):
     collection = chroma_client.get_collection(collection_name,embedding_function=cohere_ef)
@@ -570,7 +581,7 @@ def logout():
 def get_user(user_id):
     return User.query.get(int(user_id))
 
-
+fake_file()
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",debug=True)
