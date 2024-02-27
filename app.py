@@ -299,7 +299,7 @@ def chroma_to_dataframe(collection_name):
     return df
 
 def chroma_to_list_dicts(collection_name):
-    df = chroma_to_dataframe(session['user_id'])
+    df = chroma_to_dataframe("demo.out")#session['user_id'])
    
     ## Handle NaT (Not-a-Time) values
     df = df.where(pd.notna(df), None)
@@ -324,7 +324,7 @@ def get_log_lines():
     # Read table into DataFrame
     #df = pd.read_sql_table('log_data', con=engine)
 
-    list_of_dicts = chroma_to_list_dicts(session['user_id'])
+    list_of_dicts = chroma_to_list_dicts("demo.out")#session['user_id']
     return jsonify(list_of_dicts)
 
 #send chat
@@ -427,7 +427,7 @@ def gpt_call(messages,user_msg,temperature=0.4,print_response=True):
             return None
 
 def chroma_db_search(search_query,n_results=10):
-    collection = chroma_client.get_collection(session['user_id'],embedding_function=cohere_ef)
+    collection = chroma_client.get_collection("demo.out",embedding_function=cohere_ef)
     results = collection.query(
         query_texts=[search_query],
         n_results=n_results
@@ -477,7 +477,7 @@ def send_chat():
 
 #create heatmap
 def create_heatmap_gradient(search_result):
-    lines = chroma_to_list_dicts(session['user_id'])
+    lines = chroma_to_list_dicts("demo.out")
     total_lines = len(lines)
     percentages1 = []
     #linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(239,255,0,1) 16%, rgba(0,76,255,1) 22%, rgba(234,255,0,1) 27%, rgba(9,9,121,1) 35%, rgba(7,53,150,1) 49%, rgba(4,122,195,1) 71%, rgba(2,159,220,1) 83%, rgba(0,212,255,1) 100%);
